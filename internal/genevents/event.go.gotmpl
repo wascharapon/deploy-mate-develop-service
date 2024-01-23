@@ -1,0 +1,41 @@
+package goaction
+
+import (
+	"encoding/json"
+	"fmt"
+	"os"
+	
+	"github.com/google/go-github/v31/github"
+)
+
+// A Github action triggering event.
+// See https://help.github.com/en/actions/reference/events-that-trigger-workflows.
+type EventType string
+
+// All Github action event types.
+const (
+{{ range . }}   Event{{ .CamelCase }} EventType = "{{ .Name }}"
+{{ end }}
+)
+{{ range . }}
+{{ if not .SkipEventGetFunc }}
+// {{ .EventGetFuncName }} returns information about a current {{ .Pretty }}.
+func {{ .EventGetFuncName }}() (*{{ .GithubReturnValue }}, error) {
+	if Event != Event{{ .CamelCase }} {
+		return nil, fmt.Errorf("not '{{ .Name }}' event")
+	}
+	var i {{ .GithubReturnValue }}
+	err := decodeEventInfo(&i)
+	return &i, err
+}
+{{ end }}
+{{ end }}
+
+func decodeEventInfo(i interface{}) error {
+	f, err := os.Open(eventPath)
+	if err != nil {
+		return err
+	}
+	defer f.Close()
+	return json.NewDecoder(f).Decode(i)
+}
