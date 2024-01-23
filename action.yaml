@@ -28,3 +28,6 @@ runs:
         go-version: '1.21.6'
     - run: go run app/deploy_mate/main.go -location=${{ inputs.location }} -project=${{ inputs.project }} -name=${{ inputs.name }} -image=${{ inputs.image }}
       shell: bash
+branding:
+  icon: cloud
+  color: red      
