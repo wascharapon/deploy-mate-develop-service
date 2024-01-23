@@ -1,0 +1,32 @@
+name: Deploy to Deploys.app
+description: Deploy docker image to deploys.app
+author: Deploys.app
+inputs:
+  path:
+    default: .
+    description: "Path to main Go main package."
+    required: true
+  project:
+    description: Project ID
+    required: true
+  location:
+    description: Deploy Location ID
+    required: true
+  name:
+    description: Deployment Name
+    required: true
+  image:
+    description: Docker Image to deploy
+    required: true
+
+runs:
+  using: docker
+  image: Dockerfile
+  args:
+    - "-project=${{ inputs.project }}"
+    - "-location=${{ inputs.location }}"
+    - "-name=${{ inputs.name }}"
+    - "-image=${{ inputs.image }}"
+branding:
+  icon: cloud
+  color: red

@@ -1,0 +1,10 @@
+version: '3.7'
+services:
+    deploy_mate:
+      build:
+        context: .
+        dockerfile: ./app/deploy_mate/Dockerfile
+      environment:
+        PORT: 8080
+      ports:
+        - 8080:8080
