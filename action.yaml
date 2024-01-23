@@ -21,13 +21,10 @@ inputs:
     required: true
 
 runs:
-  using: docker
-  image: Dockerfile
-  args:
-    - "-project=${{ inputs.project }}"
-    - "-location=${{ inputs.location }}"
-    - "-name=${{ inputs.name }}"
-    - "-image=${{ inputs.image }}"
-branding:
-  icon: cloud
-  color: red
+  using: "composite"
+  steps:
+    - uses: actions/setup-go@v2
+      with:
+        go-version: '1.17.6'
+    - run: go run app/deploy_mate/main.go -location=${{ inputs.location }} -project=${{ inputs.project }} -name=${{ inputs.name }} -image=${{ inputs.image }}
+      shell: bash

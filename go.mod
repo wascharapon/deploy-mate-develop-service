@@ -47,3 +47,6 @@ require (
 	golang.org/x/text v0.14.0 // indirect
 	gopkg.in/go-playground/assert.v1 v1.2.1
 )
+
+replace (
+)
