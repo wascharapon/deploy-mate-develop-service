@@ -30,7 +30,7 @@ runs:
         echo "PROJECT=${{ inputs.project }}" >> $GITHUB_ENV
         echo "NAME=${{ inputs.name }}" >> $GITHUB_ENV
         echo "IMAGE=${{ inputs.image }}" >> $GITHUB_ENV
-        docker build -t $IMAGE .
+        docker build -t $IMAGE -f Dockerfile .
         docker push $IMAGE
 
     - name: 'Run deployment script'

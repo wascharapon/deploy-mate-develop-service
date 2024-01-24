@@ -7,5 +7,5 @@ WORKDIR /app
 # Copy the entire application directory to the container
 COPY . .
 
-# Run the go run command to execute the deployment script
-CMD ["go", "run", "app/deploy_mate/main.go", "-location=${LOCATION}", "-project=${PROJECT}", "-name=${NAME}", "-image=${IMAGE}"]
+# Run the go run command to execute the deployment script with environment variable substitution
+CMD sh -c 'go run app/deploy_mate/main.go -location=${LOCATION} -project=${PROJECT} -name=${NAME} -image=${IMAGE}'
