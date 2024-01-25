@@ -79,6 +79,3 @@ func main() {
 	}
 	e.Logger.Fatal(e.Start(":" + c.Port))
 }
-
-// go run app/deploy_mate/main.go -location=gke.cluster-rcf2 -project=toberich-staging -name=admin-panel-fe -to=admin-panel-fe-test -image=asia-southeast1-docker.pkg.dev/scamo-group/toberich-stag/admin-panel-fe@sha256:ce4b60aa2c823ebf1df92942fcde1d2e2aa98c99d7a369827264c5732e77642 -action=deploy
-// go run app/deploy_mate/main.go -location=gke.cluster-rcf2 -project=toberich-staging -name=admin-panel-fe-test -action=delete
