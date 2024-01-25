@@ -14,14 +14,15 @@ type deployMateHandler struct {
 }
 
 func InitDeployMateHandler(e *echo.Echo, DeployMateUseCase domain.DeployMateUseCase, clientDeploy client.Client) {
-	handler := &deployMateHandler{
+	h := &deployMateHandler{
 		DeployMateUseCase,
 		clientDeploy,
 	}
 	dm := e.Group("/deploy-mate")
-	dm.GET("/list/:project", handler.list)
-	dm.POST("/get", handler.get)
-	dm.POST("/copyAndDeploy", handler.copyAndDeploy)
+	dm.GET("/list/:project", h.list)
+	dm.POST("/get", h.get)
+	dm.POST("/copyAndDeploy", h.copyAndDeploy)
+	dm.POST("/delete", h.delete)
 }
 
 func (dmh *deployMateHandler) list(c echo.Context) error {
@@ -57,6 +58,21 @@ func (dmh *deployMateHandler) copyAndDeploy(c echo.Context) error {
 		return domain.ErrorBindStructFailed.SetMessage(domain.GetAccountDetail)
 	}
 	res, err := dmh.DeployMateUseCase.CopyAndDeploy(c.Request().Context(), dmh.clientDeploy, dto)
+	if err != nil {
+		return err
+	}
+	return c.JSON(res.Status, res)
+}
+
+func (dmh *deployMateHandler) delete(c echo.Context) error {
+	var dto domain.DeploymentDeleteDto
+	if err := api.BindQueryParams(c, &dto); err != nil {
+		return err
+	}
+	if err := c.Bind(&dto); err != nil {
+		return domain.ErrorBindStructFailed.SetMessage(domain.GetAccountDetail)
+	}
+	res, err := dmh.DeployMateUseCase.Delete(c.Request().Context(), dmh.clientDeploy, dto)
 	if err != nil {
 		return err
 	}

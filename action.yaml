@@ -10,9 +10,16 @@ inputs:
   name:
     description: "Deployment Name"
     required: true
+  to:
+    description: "Deployment to Name"
+    required: true
   image:
     description: "Docker Image to deploy"
     required: true
+  type:
+    description: "Action Type"
+    required: true
+
 runs:
   using: "docker"
   image: "Dockerfile"

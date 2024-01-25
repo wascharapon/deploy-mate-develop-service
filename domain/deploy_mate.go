@@ -6,6 +6,11 @@ import (
 	"github.com/deploys-app/deploys/api/client"
 )
 
+const (
+	ActionDeploy string = "deploy"
+	ActionDelete string = "delete"
+)
+
 type PullSecretsPassword struct {
 	Type                    string `json:"type"`
 	ProjectId               string `json:"project_id"`
@@ -52,8 +57,15 @@ type CopyAndDeployDto struct {
 	Image    string `json:"image" form:"image" validate:"required"`
 }
 
+type DeploymentDeleteDto struct {
+	Location string `json:"location" form:"location" validate:"required"`
+	Project  string `json:"project" form:"project" validate:"required"`
+	Name     string `json:"name" form:"name" validate:"required"`
+}
+
 type DeployMateUseCase interface {
 	List(ctx context.Context, clientDeploy client.Client, project string) (*Response, error)
 	Get(ctx context.Context, clientDeploy client.Client, deploymentGetDto DeploymentGetDto) (*Response, error)
 	CopyAndDeploy(ctx context.Context, clientDeploy client.Client, copyAndDeployDto CopyAndDeployDto) (*Response, error)
+	Delete(ctx context.Context, clientDeploy client.Client, deploymentDeleteDto DeploymentDeleteDto) (*Response, error)
 }

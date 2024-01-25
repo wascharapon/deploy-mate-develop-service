@@ -113,3 +113,22 @@ func (u *useCase) CopyAndDeploy(ctx context.Context, clientDeploy client.Client,
 
 	return resp, nil
 }
+
+func (u *useCase) Delete(ctx context.Context, clientDeploy client.Client, deploymentDeleteDto domain.DeploymentDeleteDto) (*domain.Response, error) {
+	deployment, err := clientDeploy.Deployment().Delete(ctx, &api.DeploymentDelete{
+		Location: deploymentDeleteDto.Location,
+		Project:  deploymentDeleteDto.Project,
+		Name:     deploymentDeleteDto.Name,
+	})
+
+	resp := &domain.Response{
+		Title: domain.DeleteAccount, Status: http.StatusOK, Description: domain.Success, Result: deployment,
+	}
+
+	if err != nil {
+		resp.Description = domain.NotFound
+		resp.Status = http.StatusFound
+	}
+
+	return resp, nil
+}

@@ -77,6 +77,7 @@ const (
 	CheckServerStatus string = "ตรวจสอบสถานะ"
 	GetAccountDetail  string = "ดูข้อมูลบัญชี"
 	CopyAndDeploy     string = "คัดลอกและเริ่มใช้งาน"
+	DeleteAccount     string = "ลบข้อมูลบัญชี"
 )
 
 const (
