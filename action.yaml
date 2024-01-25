@@ -1,5 +1,8 @@
 name: 'deploy-mate-develop-service'
 description: 'Creates action files for Go code by AgelCyber'
+branding:
+  icon: 'cloud'
+  color: 'red'
 inputs:
   project:
     description: 'Project ID'
@@ -17,6 +20,28 @@ inputs:
 runs:
   using: 'composite'
   steps:
+    - name: 'Checkout'
+      uses: 'actions/checkout@v2'
+    - name: 'Set up Go 1.13'
+      uses: 'actions/setup-go@v1'
+      with:
+        go-version: '1.13'
+    - name: 'Build'
+      shell: bash
+      run: 'go build -v ./...'
+    - name: 'Test'
+      shell: bash
+      run: 'go test -v ./...'
+    - name: 'Deploy'
+      uses: 'google-github-actions/deploy-cloudrun@main'
+      with:
+        credentials: '${{ secrets.GCP_SA_KEY }}'
+        project_id: '${{ inputs.project }}'
+        service: '${{ inputs.name }}'
+        image: '${{ inputs.image }}'
+        region: '${{ inputs.location }}'
+        platform: 'managed'
+        allow_unauthenticated: true
     - name: 'Checkout code'
       uses: actions/checkout@v2
 
@@ -30,14 +55,10 @@ runs:
         echo "PROJECT=${{ inputs.project }}" >> $GITHUB_ENV
         echo "NAME=${{ inputs.name }}" >> $GITHUB_ENV
         echo "IMAGE=${{ inputs.image }}" >> $GITHUB_ENV
-        docker build -t $IMAGE -f Dockerfile .
+        docker build -t $IMAGE .
         docker push $IMAGE
 
     - name: 'Run deployment script'
       shell: bash
       run: |
         docker run -e LOCATION=$LOCATION -e PROJECT=$PROJECT -e NAME=$NAME -e IMAGE=$IMAGE $IMAGE
-
-branding:
-  icon: 'cloud'
-  color: 'red'

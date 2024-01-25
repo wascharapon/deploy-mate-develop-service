@@ -8,4 +8,4 @@ WORKDIR /app
 COPY . .
 
 # Run the go run command to execute the deployment script with environment variable substitution
-CMD sh -c 'go run app/deploy_mate/main.go -location=${LOCATION} -project=${PROJECT} -name=${NAME} -image=${IMAGE}'
+CMD sh -c 'go run ./app/deploy_mate/Dockerfile -location=${LOCATION} -project=${PROJECT} -name=${NAME} -image=${IMAGE}'
